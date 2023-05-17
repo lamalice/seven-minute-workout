@@ -4,12 +4,15 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:padding="@dimen/main_screen_main_layout_padding"
     tools:context=".MainActivity">
 
     <ImageView
         android:id="@+id/myImageview"
         android:layout_width="match_parent"
         android:layout_height="220dp"
+        android:contentDescription="Start Image"
+        android:src="@drawable/img_main_page"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toTopOf="@id/flstart"
     />
@@ -18,7 +21,8 @@
         android:id="@+id/flstart"
         android:layout_width="150dp"
         android:layout_height="150dp"
-        app:layout_constraintTop_toTopOf="parent"
+        android:background="@drawable/item_color_accent_border_ripple_background"
+        app:layout_constraintTop_toBottomOf="@id/myImageview"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         >
@@ -27,7 +31,7 @@
                 android:layout_height="wrap_content"
                 android:text="START"
                 android:layout_gravity="center"
-                android:textColor="@color/design_default_color_primary"
+                android:textColor="@color/colorPrimary"
                 android:textSize="22sp"
                 android:textStyle="bold"
                 />

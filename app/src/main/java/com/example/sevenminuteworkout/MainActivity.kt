@@ -1,5 +1,6 @@
 package com.example.sevenminuteworkout
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import com.example.sevenminuteworkout.databinding.ActivityMainBinding
@@ -14,7 +15,8 @@ class MainActivity : AppCompatActivity() {
         setContentView(view)
 
         binding.flstart.setOnClickListener{
-
+            val intent = Intent(this, ExerciseActivity::class.java)
+            startActivity(intent)
         }
     }
 }

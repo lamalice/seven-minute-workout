@@ -1,5 +1,7 @@
 package com.example.sevenminuteworkout
 
+import android.media.MediaPlayer
+import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.CountDownTimer
@@ -21,6 +23,8 @@ class ExerciseActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
     private var currentExercisePos = -1
 
     private var tts: TextToSpeech? = null
+    private var player: MediaPlayer? = null
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -48,8 +52,17 @@ class ExerciseActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
         binding.flExerciseView.visibility = View.INVISIBLE
         binding.tvUpcomingLabel.visibility = View.VISIBLE
         binding.tvUpcomingExercise.visibility = View.VISIBLE
-
         binding.tvUpcomingExercise.text = exerciseList!![currentExercisePos + 1].getName()
+
+        try {
+            val soundURI = Uri.parse(
+                "android.resource://com.example.sevenminuteworkout/" + R.raw.press_start)
+            player = MediaPlayer.create(applicationContext, soundURI)
+            player?.isLooping = false
+            player?.start()
+        }catch (e: Exception){
+            e.printStackTrace()
+        }
 
         if(restTimer != null){
             restTimer?.cancel()
@@ -126,6 +139,15 @@ class ExerciseActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
         if(exerciseTimer != null){
             exerciseTimer?.cancel()
             exerciseProgress = 0
+        }
+
+        if (tts != null){
+            tts!!.stop()
+            tts!!.shutdown()
+        }
+
+        if(player != null){
+            player!!.stop()
         }
     }
 

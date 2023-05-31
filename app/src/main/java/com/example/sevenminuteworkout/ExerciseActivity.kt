@@ -3,10 +3,11 @@ package com.example.sevenminuteworkout
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.CountDownTimer
+import android.speech.tts.TextToSpeech
 import android.view.View
 import com.example.sevenminuteworkout.databinding.ActivityExerciseBinding
 
-class ExerciseActivity : AppCompatActivity() {
+class ExerciseActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
 
     private lateinit var binding: ActivityExerciseBinding
 
@@ -19,6 +20,7 @@ class ExerciseActivity : AppCompatActivity() {
     private var exerciseList: ArrayList<ExerciseModel>? = null
     private var currentExercisePos = -1
 
+    private var tts: TextToSpeech? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -32,8 +34,9 @@ class ExerciseActivity : AppCompatActivity() {
         exerciseList = Constants.defaultExerciseList()
 
         binding.toolBarExercise.setNavigationOnClickListener {
-
         }
+
+        tts = TextToSpeech(this, this)
         setupRestView()
     }
 
@@ -43,6 +46,10 @@ class ExerciseActivity : AppCompatActivity() {
         binding.tvExerciseName.visibility = View.INVISIBLE
         binding.exerciseImage.visibility = View.INVISIBLE
         binding.flExerciseView.visibility = View.INVISIBLE
+        binding.tvUpcomingLabel.visibility = View.VISIBLE
+        binding.tvUpcomingExercise.visibility = View.VISIBLE
+
+        binding.tvUpcomingExercise.text = exerciseList!![currentExercisePos + 1].getName()
 
         if(restTimer != null){
             restTimer?.cancel()
@@ -57,6 +64,9 @@ class ExerciseActivity : AppCompatActivity() {
         binding.tvExerciseName.visibility = View.VISIBLE
         binding.exerciseImage.visibility = View.VISIBLE
         binding.flExerciseView.visibility = View.VISIBLE
+        binding.tvUpcomingExercise.visibility = View.INVISIBLE
+        binding.tvUpcomingLabel.visibility = View.INVISIBLE
+
         if(exerciseTimer != null){
             exerciseTimer?.cancel()
             exerciseProgress = 0
@@ -117,6 +127,14 @@ class ExerciseActivity : AppCompatActivity() {
             exerciseTimer?.cancel()
             exerciseProgress = 0
         }
+    }
+
+    override fun onInit(p0: Int) {
+
+    }
+
+    private fun speakOut(text:String){
+        tts!!.speak(text, TextToSpeech.QUEUE_FLUSH,null, "")
     }
 
 }

@@ -1,4 +1,4 @@
-# seven-minute-workout
+# A Seven Minute Workout App
 An android app that guides users through a seven minute workout 
 
 Kotlin features ultilized within this App

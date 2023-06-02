@@ -1,5 +1,6 @@
 package com.example.sevenminuteworkout
 
+import android.content.Intent
 import android.media.MediaPlayer
 import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
@@ -16,10 +17,10 @@ class ExerciseActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
 
     private var restTimer: CountDownTimer? = null
     private var restProgress = 0
-
+    private var restTimerDuration: Long = 1
     private var exerciseTimer: CountDownTimer? = null
     private var exerciseProgress = 0
-
+    private var exerciseTimerDuration: Long = 1
     private var exerciseList: ArrayList<ExerciseModel>? = null
     private var currentExercisePos = -1
 
@@ -34,7 +35,6 @@ class ExerciseActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
         setContentView(binding.root)
 
         setSupportActionBar(binding.toolBarExercise)
-
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
         exerciseList = Constants.defaultExerciseList()
@@ -103,7 +103,7 @@ class ExerciseActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
     private fun setRestProgressBar(){
         binding.progressBar.progress = restProgress
 
-        restTimer = object: CountDownTimer(10000, 1000){
+        restTimer = object: CountDownTimer(restTimerDuration * 1000, 1000){
             override fun onTick(p0: Long) {
                 restProgress++
                 binding.progressBar.progress = 10 - restProgress
@@ -122,8 +122,8 @@ class ExerciseActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
 
     private fun setExerciseProgressBar(){
         binding.exerciseProgressBar.progress = exerciseProgress
+        exerciseTimer = object: CountDownTimer(exerciseTimerDuration*1000, 1000){
 
-        exerciseTimer = object: CountDownTimer(30000, 1000){
             override fun onTick(p0: Long) {
                 exerciseProgress++
                 binding.exerciseProgressBar.progress = 30 - exerciseProgress
@@ -131,15 +131,17 @@ class ExerciseActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
             }
 
             override fun onFinish() {
-                exerciseList!![currentExercisePos].setIsSelected(false)
-                exerciseList!![currentExercisePos].setIsCompleted(true)
-                exerciseAdapter!!.notifyDataSetChanged()
-
                 if(currentExercisePos < exerciseList!!.size -1){
+                    exerciseList!![currentExercisePos].setIsSelected(false)
+                    exerciseList!![currentExercisePos].setIsCompleted(true)
+                    exerciseAdapter!!.notifyDataSetChanged()
                     setupRestView()
+                }else {
+                    finish()
+                    val intent = Intent(this@ExerciseActivity, FinishActivity::class.java)
+                    startActivity(intent)
                 }
             }
-
         }.start()
     }
 

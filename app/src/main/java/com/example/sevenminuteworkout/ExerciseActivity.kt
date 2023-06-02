@@ -7,6 +7,7 @@ import android.os.Bundle
 import android.os.CountDownTimer
 import android.speech.tts.TextToSpeech
 import android.view.View
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.sevenminuteworkout.databinding.ActivityExerciseBinding
 
 class ExerciseActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
@@ -25,6 +26,7 @@ class ExerciseActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
     private var tts: TextToSpeech? = null
     private var player: MediaPlayer? = null
 
+    private var exerciseAdapter: ExerciseStatusAdapter? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -42,6 +44,14 @@ class ExerciseActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
 
         tts = TextToSpeech(this, this)
         setupRestView()
+        setupExerciseStatusRecyclerView()
+    }
+
+    private fun setupExerciseStatusRecyclerView(){
+        binding.rvExerciseStatus.layoutManager =
+            LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
+        exerciseAdapter = ExerciseStatusAdapter(exerciseList!!)
+        binding.rvExerciseStatus?.adapter = exerciseAdapter
     }
 
     private fun setupRestView(){
@@ -102,6 +112,8 @@ class ExerciseActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
 
             override fun onFinish() {
                 currentExercisePos++
+                exerciseList!![currentExercisePos].setIsSelected(true)
+                exerciseAdapter!!.notifyDataSetChanged()
                 setupExerciseView()
             }
 
@@ -119,6 +131,10 @@ class ExerciseActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
             }
 
             override fun onFinish() {
+                exerciseList!![currentExercisePos].setIsSelected(false)
+                exerciseList!![currentExercisePos].setIsCompleted(true)
+                exerciseAdapter!!.notifyDataSetChanged()
+
                 if(currentExercisePos < exerciseList!!.size -1){
                     setupRestView()
                 }

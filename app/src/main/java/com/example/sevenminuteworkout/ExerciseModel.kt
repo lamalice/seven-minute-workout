@@ -32,21 +32,23 @@ class ExerciseModel (
         this.image = image
     }
 
-    fun setIsCompleted(): Boolean{
+    fun setIsCompleted(isCompleted: Boolean){
+        this.isCompleted = isCompleted
+    }
+
+    fun getIsCompleted(): Boolean{
         return isCompleted
     }
 
-    fun getIsCompleted(isCompleted: Boolean){
-        this.isCompleted = isCompleted
+    fun setIsSelected(isSelected: Boolean){
+        this.isSelected = isSelected
     }
 
     fun getIsSelected():Boolean{
         return isSelected
     }
 
-    fun setIsSelected(isCompleted: Boolean){
-        this.isSelected = isSelected
-    }
+
 }
 
 
